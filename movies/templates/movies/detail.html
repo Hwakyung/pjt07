@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+  <div>
+    <img src="{{movie.poster_url}}" alt="" width="50%" height="auto">
+    <h1 class="my-2">{{movie.title}}</h1>
+    <h3 class="my-3">관중수 : {{movie.audience}}</h3>
+    <h4>영화설명</h4>
+    <p>{{movie.description}}</p>
+  </div>
+  <hr>
+  <form action="{% url 'movies:reviews_new' movie.id %}" method="post">
+    {% csrf_token %}
+    {% bootstrap_form review_form %}
+    <input type="submit" value="등록" class="btn">
+  </form>
+  <hr>
+  {% if user in movie.like_users.all %}
+    <a href="{% url 'movies:like' movie.id %}">좋아요 취소</a>
+  {% else %}
+    <a href="{% url 'movies:like' movie.id %}">좋아요</a>
+  {% endif %}
+  <hr>
+  {% for review in reviews %}
+    <p>{{review.user}}: {{review.content}} / {{review.score}}</p>
+    <form action="{% url 'movies:reviews_delete' movie.id review.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="삭제">
+    </form>
+  {% endfor %}
+{% endblock %}

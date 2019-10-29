@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block body%}
+{%for account in accounts%}
+<div>
+    <a href="{%url 'accounts:detail' account.id%}">{{account.username}}</a>
+
+</div>
+{%endfor%}
+{%endblock%}
